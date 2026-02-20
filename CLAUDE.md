@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Next.js 15.5.3 application with TypeScript and Tailwind CSS v4, using the App Router architecture with Turbopack enabled for both development and production builds.
+A Next.js lifting diary app with Clerk authentication, Neon PostgreSQL via Drizzle ORM, and shadcn/ui components.
 
 ## Commands
 
@@ -12,6 +12,8 @@ This is a Next.js 15.5.3 application with TypeScript and Tailwind CSS v4, using 
 - `npm run build` - Build for production with Turbopack
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
+- `npx drizzle-kit push` - Push schema changes to database
+- `npx drizzle-kit studio` - Open Drizzle Studio for DB inspection
 
 ## Code Generation Guidelines
 
@@ -26,7 +28,26 @@ This is a Next.js 15.5.3 application with TypeScript and Tailwind CSS v4, using 
 
 ## Architecture
 
-- **App Router**: Located at `src/app/` with `layout.tsx` and `page.tsx` files
-- **Styling**: Tailwind CSS v4 with PostCSS configuration
-- **Path Alias**: `@/*` maps to `./src/*` for cleaner imports
-- **Font System**: Uses Geist fonts configured in the root layout
+### Stack
+- **Framework**: Next.js App Router (`src/app/`) with Turbopack
+- **Auth**: Clerk (`@clerk/nextjs`) — middleware in `src/middleware.ts` protects `/dashboard` routes
+- **Database**: Neon serverless PostgreSQL via Drizzle ORM (`src/db/`)
+- **UI**: shadcn/ui components only (`src/components/ui/`) — do not create custom components
+- **Styling**: Tailwind CSS v4 with PostCSS; use `cn()` from `src/lib/utils.ts` for class merging
+- **Path Alias**: `@/*` maps to `./src/*`
+
+### Data Flow
+Server Components → `src/data/` helpers → `src/db/index.ts` (Drizzle) → Neon PostgreSQL
+
+All data fetching goes through `src/data/` helpers. All mutations use Server Actions colocated in `actions.ts` files next to their route. Data helpers enforce `userId` isolation via Clerk's `auth()`.
+
+### Database Schema (`src/db/schema.ts`)
+- `workouts` — userId, name, startedAt, completedAt
+- `exercises` — global exercise catalog (name)
+- `workoutExercises` — junction: workoutId, exerciseId, order
+- `sets` — workoutExerciseId, setNumber, weight (decimal), reps
+
+### Key Conventions
+- Next.js 15 async params: page props use `Promise<{ param: string }>` — always `await params`
+- Date formatting: use `date-fns` with ordinal format (e.g., "1st Sep 2025")
+- Forms: `react-hook-form` + Zod validation; server actions return `{ error?: string }`
