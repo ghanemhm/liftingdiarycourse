@@ -18,7 +18,13 @@
       "Bash(git merge:*)",
       "Bash(git fetch:*)",
       "Bash(git push:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(git config:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(python:*)",
+      "Bash(PYTHONIOENCODING=utf-8 python:*)",
+      "Bash(pip install:*)"
     ],
     "deny": [],
     "ask": []
