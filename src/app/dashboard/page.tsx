@@ -2,6 +2,7 @@ import { getUserWorkouts } from "@/data/user-workouts";
 import { format } from "date-fns";
 import { CalendarClient } from "./calendar-client";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Suspense } from "react";
 import Link from "next/link";
 
@@ -59,44 +60,43 @@ async function DashboardContent({
       <div className="space-y-4">
         {workouts.length > 0 ? (
           workouts.map((workout) => (
-            <Link
-              key={workout.id}
-              href={`/dashboard/workout/${workout.id}`}
-              className="block border rounded-lg p-4 hover:shadow-md transition-shadow"
-            >
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-semibold text-lg">{workout.name}</h3>
-                <span className="text-sm text-muted-foreground">
-                  {format(workout.startedAt, "h:mm a")}
-                </span>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">
-                    {workout.completedAt ? "Completed" : "In Progress"}
-                  </span>
-                  {workout.completedAt && (
+            <Link key={workout.id} href={`/dashboard/workout/${workout.id}`}>
+              <Card className="hover:shadow-md transition-shadow">
+                <CardHeader className="pb-2">
+                  <div className="flex justify-between items-center">
+                    <CardTitle className="text-lg">{workout.name}</CardTitle>
                     <span className="text-sm text-muted-foreground">
-                      • Duration:{" "}
-                      {Math.round(
-                        (new Date(workout.completedAt).getTime() -
-                          new Date(workout.startedAt).getTime()) /
-                          (1000 * 60)
-                      )}{" "}
-                      min
+                      {format(workout.startedAt, "h:mm a")}
                     </span>
-                  )}
-                </div>
-              </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <span>{workout.completedAt ? "Completed" : "In Progress"}</span>
+                    {workout.completedAt && (
+                      <span>
+                        • Duration:{" "}
+                        {Math.round(
+                          (new Date(workout.completedAt).getTime() -
+                            new Date(workout.startedAt).getTime()) /
+                            (1000 * 60)
+                        )}{" "}
+                        min
+                      </span>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
             </Link>
           ))
         ) : (
-          <div className="border rounded-lg p-8 text-center">
-            <p className="text-muted-foreground">
-              No workouts logged for this date
-            </p>
-          </div>
+          <Card>
+            <CardContent className="p-8 text-center">
+              <p className="text-muted-foreground">
+                No workouts logged for this date
+              </p>
+            </CardContent>
+          </Card>
         )}
       </div>
     </div>
