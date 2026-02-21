@@ -34,9 +34,16 @@ async function DashboardContent({
     return new Date(year, month - 1, day);
   };
 
-  const selectedDate = searchParams.date
-    ? parseDateFromString(searchParams.date)
-    : new Date();
+  const todayStr = (() => {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    const d = String(now.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  })();
+
+  const selectedDateStr = searchParams.date ?? todayStr;
+  const selectedDate = parseDateFromString(selectedDateStr);
 
   const workouts = await getUserWorkouts(selectedDate);
 
@@ -47,7 +54,7 @@ async function DashboardContent({
         <h2 className="text-base font-semibold mb-4">Select Date</h2>
         <Card className="inline-block">
           <CardContent className="p-2">
-            <CalendarClient />
+            <CalendarClient selectedDate={selectedDateStr} />
           </CardContent>
         </Card>
       </div>

@@ -3,29 +3,26 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { Calendar } from "@/components/ui/calendar";
 
-export function CalendarClient() {
+interface CalendarClientProps {
+  selectedDate: string; // "YYYY-MM-DD"
+}
+
+export function CalendarClient({ selectedDate: selectedDateStr }: CalendarClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const parseDateFromString = (dateString: string): Date => {
-    const [year, month, day] = dateString.split("-").map(Number);
-    return new Date(year, month - 1, day);
-  };
-
-  const selectedDate = searchParams.get("date")
-    ? parseDateFromString(searchParams.get("date")!)
-    : new Date();
+  const [year, month, day] = selectedDateStr.split("-").map(Number);
+  const selectedDate = new Date(year, month - 1, day);
 
   const handleDateSelect = (date: Date | undefined) => {
     if (!date) return;
 
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const formatted = `${year}-${month}-${day}`;
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
 
     const params = new URLSearchParams(searchParams);
-    params.set("date", formatted);
+    params.set("date", `${y}-${m}-${d}`);
     router.push(`/dashboard?${params.toString()}`);
   };
 
