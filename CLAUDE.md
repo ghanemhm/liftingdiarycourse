@@ -17,14 +17,15 @@ A Next.js lifting diary app with Clerk authentication, Neon PostgreSQL via Drizz
 
 ## Code Generation Guidelines
 
-**IMPORTANT**: When generating any code, ALWAYS first refer to the relevant documentation files within the `/docs` directory to understand existing patterns, conventions, and best practices before implementation:
+**IMPORTANT**: Before generating ANY code, you MUST ALWAYS read the relevant documentation file(s) within the `/docs` directory first. This is non-negotiable — do not write a single line of code without first consulting the applicable doc(s) to understand existing patterns, conventions, and best practices.
 
-- /docs/auth.md
-- /docs/data-fetching.md
-- /docs/data-mutations.md
-- /docs/routing.md
-- /docs/server-components.md
 - /docs/ui.md
+- /docs/auth.md — authentication patterns (Clerk, protected routes, middleware)
+- /docs/data-fetching.md — server-side data access via `src/data/` helpers
+- /docs/data-mutations.md — server actions and form handling
+- /docs/routing.md — Next.js App Router conventions and page structure
+- /docs/server-components.md — server vs client component decisions
+- /docs/ui.md — UI components (shadcn/ui only), styling, and date formatting
 
 ## Architecture
 

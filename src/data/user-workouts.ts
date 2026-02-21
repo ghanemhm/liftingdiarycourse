@@ -4,17 +4,22 @@ import { eq, desc } from 'drizzle-orm'
 import { auth } from '@clerk/nextjs/server'
 
 /**
- * Returns workouts for the current user, optionally filtered to a single day.
+ * Returns workouts for the current user with their exercises, optionally filtered to a single day.
  */
 export async function getUserWorkouts(date?: Date) {
   const { userId } = await auth()
   if (!userId) throw new Error('Unauthorized')
 
-  const rows = await db
-    .select()
-    .from(workouts)
-    .where(eq(workouts.userId, userId))
-    .orderBy(desc(workouts.startedAt))
+  const rows = await db.query.workouts.findMany({
+    where: eq(workouts.userId, userId),
+    orderBy: [desc(workouts.startedAt)],
+    with: {
+      workoutExercises: {
+        with: { exercise: true },
+        orderBy: (we, { asc }) => [asc(we.order)],
+      },
+    },
+  })
 
   if (!date) return rows
 
