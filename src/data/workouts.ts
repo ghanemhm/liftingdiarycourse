@@ -54,6 +54,15 @@ export async function getWorkoutByIdHelper(workoutId: string, userId: string) {
   return workout ?? null
 }
 
+export async function completeWorkoutHelper(workoutId: string, userId: string) {
+  const [workout] = await db
+    .update(workouts)
+    .set({ completedAt: new Date(), updatedAt: new Date() })
+    .where(and(eq(workouts.id, workoutId), eq(workouts.userId, userId)))
+    .returning()
+  return workout
+}
+
 export async function updateWorkoutHelper(
   workoutId: string,
   userId: string,

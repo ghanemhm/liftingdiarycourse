@@ -1,10 +1,9 @@
 'use server';
 
 import { z } from 'zod';
-import { getWorkoutByIdHelper, updateWorkoutHelper } from '@/data/workouts';
+import { getWorkoutByIdHelper, updateWorkoutHelper, completeWorkoutHelper } from '@/data/workouts';
 import { auth } from '@clerk/nextjs/server';
 import type { InferSelectModel } from 'drizzle-orm';
-import { eq } from 'drizzle-orm';
 import { workouts } from '@/db/schema';
 import {
   getAllExercisesHelper,
@@ -13,7 +12,6 @@ import {
   removeExerciseFromWorkoutHelper,
 } from '@/data/exercises';
 import { addSetHelper, updateSetHelper, deleteSetHelper } from '@/data/sets';
-import { db } from '@/db';
 
 type Workout = InferSelectModel<typeof workouts>;
 
@@ -393,18 +391,11 @@ export async function completeWorkout(params: CompleteWorkoutParams) {
       };
     }
 
-    const updatedWorkout = await db
-      .update(workouts)
-      .set({
-        completedAt: new Date(),
-        updatedAt: new Date(),
-      })
-      .where(eq(workouts.id, params.workoutId))
-      .returning();
+    const updatedWorkout = await completeWorkoutHelper(params.workoutId, userId);
 
     return {
       success: true,
-      data: updatedWorkout[0],
+      data: updatedWorkout,
     };
   } catch (error) {
     console.error('Failed to complete workout:', error);
