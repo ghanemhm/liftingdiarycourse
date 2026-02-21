@@ -33,7 +33,11 @@
       "Bash(cmd.exe /c \"taskkill /PID 9024 /F\")",
       "Bash(cmd.exe /c \"taskkill /PID 9024 /F 2>&1\")",
       "Bash(cmd.exe /c \"taskkill /IM node.exe /F 2>&1\")",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(vercel:*)",
+      "Bash(vercel whoami:*)",
+      "Bash(npx vercel:*)",
+      "mcp__neon__run_sql"
     ],
     "deny": [],
     "ask": []
