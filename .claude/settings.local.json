@@ -37,7 +37,8 @@
       "Bash(vercel:*)",
       "Bash(vercel whoami:*)",
       "Bash(npx vercel:*)",
-      "mcp__neon__run_sql"
+      "mcp__neon__run_sql",
+      "Bash(gh pr:*)"
     ],
     "deny": [],
     "ask": []
