@@ -24,7 +24,15 @@
       "Bash(git remote set-url:*)",
       "Bash(python:*)",
       "Bash(PYTHONIOENCODING=utf-8 python:*)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(git rm:*)",
+      "Bash(npx drizzle-kit push:*)",
+      "Bash(node -e:*)",
+      "Bash(npm run dev:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd.exe /c \"taskkill /PID 9024 /F\")",
+      "Bash(cmd.exe /c \"taskkill /PID 9024 /F 2>&1\")",
+      "Bash(cmd.exe /c \"taskkill /IM node.exe /F 2>&1\")"
     ],
     "deny": [],
     "ask": []
