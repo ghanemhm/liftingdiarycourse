@@ -6,7 +6,6 @@ import { auth } from '@clerk/nextjs/server';
 import type { InferSelectModel } from 'drizzle-orm';
 import { workouts } from '@/db/schema';
 import {
-  getAllExercisesHelper,
   getWorkoutExercisesWithSetsHelper,
   addExerciseToWorkoutHelper,
   removeExerciseFromWorkoutHelper,
@@ -77,68 +76,6 @@ export async function updateWorkout(params: UpdateWorkoutParams): Promise<Action
     return {
       success: false,
       errors: 'Failed to update workout',
-    };
-  }
-}
-
-export async function getWorkout(workoutId: string) {
-  const { userId } = await auth();
-  if (!userId) {
-    return {
-      success: false,
-      errors: 'Authentication required',
-    };
-  }
-
-  try {
-    const workout = await getWorkoutByIdHelper(workoutId, userId);
-    if (!workout) {
-      return {
-        success: false,
-        errors: 'Workout not found',
-      };
-    }
-
-    const exercisesWithSets = await getWorkoutExercisesWithSetsHelper(
-      workoutId
-    );
-
-    return {
-      success: true,
-      data: {
-        ...workout,
-        exercises: exercisesWithSets,
-      },
-    };
-  } catch (error) {
-    console.error('Failed to get workout:', error);
-    return {
-      success: false,
-      errors: 'Failed to get workout',
-    };
-  }
-}
-
-export async function getAllExercises() {
-  const { userId } = await auth();
-  if (!userId) {
-    return {
-      success: false,
-      errors: 'Authentication required',
-    };
-  }
-
-  try {
-    const exercises = await getAllExercisesHelper();
-    return {
-      success: true,
-      data: exercises,
-    };
-  } catch (error) {
-    console.error('Failed to get exercises:', error);
-    return {
-      success: false,
-      errors: 'Failed to get exercises',
     };
   }
 }
